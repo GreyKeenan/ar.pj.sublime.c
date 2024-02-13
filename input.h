@@ -3,30 +3,25 @@
 
 
 typedef struct {
-	char target; //signed to use -1 for null
-
-	unsigned char isPressed;
+	unsigned int delayUntil;
 	unsigned int scancode;
-	void (*call)();
-} Input_TriggerNode;
-
+	unsigned char isPressed;
+} Input_Keypress;
 typedef struct {
-	/*
-	implements queue system within an array to store triggers
-	I thought this might be better than storing and checking a 'priority' variable, though perhaps not because you need to go through the entire queue when repeating same key, which prolly happens a lot
-		at least, its fine for few, evenly-triggered inputs like this, but not otherwise
-	input is a little weird since can only move once per frame, rather than free diagonal movement, and I want it to not be annoying how I prioritize inputs
-	*/
-	Input_TriggerNode *triggers;
-	unsigned char head;
-	unsigned char tail;
 	const unsigned char *keyboardState;
-} GameInputHandler;
+	Input_Keypress *keypresses;
+	unsigned char keypressesCount;
+} Input_Handler;
+//set up here to only allow 1 input per frame, since that makes sense for this kind of game.
+	// and yes, technically could just use PollEvent then, but I wanted to set it up 'properly'
 
-GameInputHandler GameInputHandler_initialize();
-void GameInputHandler_destroy(GameInputHandler *self);
+Input_Handler Input_Handler_initialize();
+void Input_Handler_destroy(Input_Handler *self);
 
-void GameInputHandler_check(GameInputHandler *self);
+unsigned char Input_Handler_update(Input_Handler *self);
+	//returns id corresponding to whatever key was pressed/triggered this frame
+	//0 = nothing
+	//for now, id correlates to position in array + 1
 
 
 #endif

@@ -53,17 +53,31 @@ void run(SDL_Renderer *renderer) {
 
 	SDL_Event event;
 
-	GameInputHandler input = GameInputHandler_initialize();
+	Input_Handler input = Input_Handler_initialize();
+	unsigned char keyCode = 0;
 
 	while (1) {
 		SDL_PollEvent(&event);
 		if (event.type == SDL_QUIT) {
 			break;
 		}
+		keyCode = Input_Handler_update(&input);
 
-		GameInputHandler_check(&input);
-
+		switch (keyCode) {
+			case 1:
+				printf("^\n");
+				break;
+			case 2:
+				printf(">\n");
+				break;
+			case 3:
+				printf("v\n");
+				break;
+			case 4:
+				printf("<\n");
+				break;
+		}
 	}
 
-	GameInputHandler_destroy(&input);
+	Input_Handler_destroy(&input);
 }
