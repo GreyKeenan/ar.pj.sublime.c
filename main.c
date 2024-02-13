@@ -64,4 +64,6 @@ void run(SDL_Renderer *renderer) {
 		GameInputHandler_check(&input);
 
 	}
+
+	GameInputHandler_destroy(&input);
 }
