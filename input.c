@@ -48,7 +48,6 @@ void Input_Handler_destroy(Input_Handler *self) {
 	self->keypresses = NULL;
 }
 
-
 unsigned char Input_Handler_update(Input_Handler *self) {
 	unsigned char returnCode = 0;
 	Input_Keypress *ckp = NULL;

@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 
 #include "input.h"
+#include "game.h"
 
 void initializeSDL(SDL_Window **_, SDL_Renderer **__);
 void run(SDL_Renderer *_);
@@ -65,7 +66,8 @@ void run(SDL_Renderer *renderer) {
 
 		switch (keyCode) {
 			case 1:
-				printf("^\n");
+				Game_Level temp = Game_Level_initialize("assets/levels/1.txt");
+				Game_Level_destroy(&temp);
 				break;
 			case 2:
 				printf(">\n");
