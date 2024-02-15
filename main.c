@@ -3,54 +3,27 @@
 #include <stdio.h>
 #include "SDL2/SDL.h"
 
+#include "rendering.h"
 #include "input.h"
 #include "game.h"
 
-void initializeSDL(SDL_Window **_, SDL_Renderer **__);
-void run(SDL_Renderer *_);
+void run(Rendering_Handler *renderingHandler);
 
 
 int main() {
 	printf("\n| Starting Program ... |\n\n");
 
-	SDL_Window *window;
-	SDL_Renderer *renderer;
+	Rendering_Handler renderingHandler = Rendering_initializeSDL();
 
-	initializeSDL(&window, &renderer);
-
-	run(renderer);
+	run(&renderingHandler);
 	
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
-	SDL_Quit();
+	Rendering_deinitializeSDL(&renderingHandler);
 
 	printf("\n| ... Program Complete. |\n");
 	return 0;
 }
 
-
-void initializeSDL(SDL_Window **windowDestination, SDL_Renderer **rendererDestination) {
-	if (SDL_Init(
-		SDL_INIT_VIDEO
-	) < 0) {
-		printf("\n| Failed to initialize SDL2. Exiting program with error: |\n%s\n", SDL_GetError());
-		exit(1);
-	}
-	*windowDestination = SDL_CreateWindow(
-		"Sublime!"
-		, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
-		, 500, 500
-		, 0		
-	);
-	*rendererDestination = SDL_CreateRenderer(
-		*windowDestination
-		, -1
-		, 0
-	);
-	return;
-}
-
-void run(SDL_Renderer *renderer) {
+void run(Rendering_Handler *renderingHandler) {
 
 	SDL_Event event;
 

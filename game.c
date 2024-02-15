@@ -1,7 +1,4 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "game.h"
 
 #define GAME_TILE_EMPTY '.'
@@ -82,13 +79,13 @@ Game_Level Game_Level_initialize(char* stringFilepath) {
 
 	fclose(filepointer);
 
-	/*temp print map
+	//temp print map
 	for (int i = 0; i < width*height; i++) {
 		printf("%c ", map[i]);
 		if (((i + 1) % 8) == 0) {
 			printf("\n");
 		}
-	}*/
+	}
 
 	Game_Level self = {
 		.map = map
