@@ -29,6 +29,7 @@ void run(Rendering_Handler *renderingHandler) {
 
 	Input_Handler input = Input_Handler_initialize();
 	unsigned char keyCode = 0;
+	Game_Level level = Game_Level_initialize("assets/levels/1.txt");
 
 	while (1) {
 		SDL_PollEvent(&event);
@@ -39,8 +40,7 @@ void run(Rendering_Handler *renderingHandler) {
 
 		switch (keyCode) {
 			case 1:
-				Game_Level temp = Game_Level_initialize("assets/levels/1.txt");
-				Game_Level_destroy(&temp);
+				printf("^\n");
 				break;
 			case 2:
 				printf(">\n");
@@ -52,7 +52,11 @@ void run(Rendering_Handler *renderingHandler) {
 				printf("<\n");
 				break;
 		}
+		
+		Rendering_go(renderingHandler, &level);
+
 	}
 
 	Input_Handler_destroy(&input);
+	Game_Level_destroy(&level);
 }
