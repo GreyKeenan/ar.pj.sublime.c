@@ -6,11 +6,11 @@
 int main(int argc, char **argv) {
 	Rendering_initialize();
 
-	StartMenu_initialize();
 	StartMenu_run();
-	StartMenu_destroy();
 
 	Rendering_destroy();
+
+	printf("\n| ...program endpoint. |\n");
 	return 0;
 }
 

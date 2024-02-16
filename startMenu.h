@@ -8,9 +8,7 @@
 #include "rendering.h"
 #include "input.h"
 
-void StartMenu_initialize();
 void StartMenu_run();
-void StartMenu_destroy();
 
 
 #endif

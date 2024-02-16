@@ -22,6 +22,7 @@ void Rendering_initialize() {
 		-1,
 		0
 	);
+
 }
 void Rendering_destroy() {
 	SDL_DestroyWindow(_window);
