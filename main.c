@@ -1,25 +1,16 @@
 
-#include <stdlib.h>
-#include <stdio.h>
-#include "SDL2/SDL.h"
-
 #include "rendering.h"
-#include "input.h" //todo: ideally dont need to include input in main at all
+#include "startMenu.h"
 #include "game.h"
 
-void run(Rendering_Handler *renderingHandler);
+int main(int argc, char **argv) {
+	Rendering_initialize();
 
+	StartMenu_initialize();
+	StartMenu_run();
+	StartMenu_destroy();
 
-int main() {
-	printf("\n| Starting Program ... |\n\n");
-
-	Rendering_Handler renderingHandler = Rendering_initializeSDL();
-
-	Game_mainloop(&renderingHandler);
-	
-	Rendering_deinitializeSDL(&renderingHandler);
-
-	printf("\n| ... Program Complete. |\n");
+	Rendering_destroy();
 	return 0;
 }
 
