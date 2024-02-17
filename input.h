@@ -9,23 +9,21 @@
 //this input setup only handles 1 action per frame
 
 typedef struct {
-	char id;
 	unsigned char isPressed;
 	unsigned int scancode;
-} _Key;
+} Keybutton;
 
-typedef struct {
-	_Key *keys;
-	unsigned char keysLength;
-	const unsigned char *keyboardState;
-	SDL_Event event;
-} Input_KeyboardHandler;
+void Input_initialize();
+void Input_resetKeyboard();
 
-Input_KeyboardHandler Input_KeyboardHandler_initialize(char *keyIds, unsigned char keysLength);
-void Input_KeyboardHandler_destroy(Input_KeyboardHandler *self);
+Keybutton *Input_initializeKeybuttons(char *keybuttonLabels, unsigned char keybuttonsLength);
+void Input_destroyKeybuttons(Keybutton *arrKeybuttons);
 
-unsigned char Input_KeyboardHandler_checkQuit(Input_KeyboardHandler *self);
-unsigned char Input_KeyboardHandler_check(Input_KeyboardHandler *self);
+unsigned char Input_checkKeybuttons(Keybutton *keybuttons, unsigned char keybuttonsLength);
+
+unsigned char Input_checkQuit();
+unsigned char Input_checkAnyKeypress();
+
 
 //?mouse position input?
 

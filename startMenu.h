@@ -8,7 +8,7 @@
 #include "rendering.h"
 #include "input.h"
 
-void StartMenu_run();
+unsigned char StartMenu_main();
 
 
 #endif

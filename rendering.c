@@ -31,3 +31,25 @@ void Rendering_destroy() {
 	_renderer = NULL;
 	SDL_Quit();
 }
+
+
+void Rendering_present() {
+	SDL_RenderPresent(_renderer);
+	SDL_RenderClear(_renderer);
+}
+
+
+void *Rendering_createTexture(char *filepath) {
+	SDL_Surface *image = SDL_LoadBMP(filepath);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, image);
+	SDL_FreeSurface(image);
+	return (void *)texture;
+}
+void Rendering_destroyTexture(void *texture) {
+	SDL_DestroyTexture((SDL_Texture *)texture);
+}
+
+void Rendering_printTexture(void *texture, int x, int y, int width, int height) {
+	SDL_Rect rectangle = {x,y, width,height};
+	SDL_RenderCopy(_renderer, (SDL_Texture *)texture, NULL, &rectangle);
+}

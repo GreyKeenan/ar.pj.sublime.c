@@ -3,56 +3,61 @@
 
 void _verifyKeyId(char id);
 
-Input_KeyboardHandler Input_KeyboardHandler_initialize(char *keyIds, unsigned char keysLength) {
-	
-	_Key *keys = malloc(sizeof(_Key) * keysLength);
-	for (unsigned char i = 0; i < keysLength; ++i) {
-		_verifyKeyId(keyIds[i]);
+const unsigned char *_keyboardState;
+SDL_Event _event;
 
-		keys[i].id = keyIds[i];
-		keys[i].scancode = SDL_GetScancodeFromKey(keyIds[i]);
-		keys[i].isPressed = 0;
+//definitions
+void Input_initialize() {
+	_keyboardState = SDL_GetKeyboardState(NULL);
+}
+void Input_resetKeyboard() {
+	SDL_ResetKeyboard();
+}
+
+Keybutton *Input_initializeKeybuttons(char *keybuttonLabels, unsigned char keybuttonsLength) {
+	Keybutton *keybuttons = malloc(sizeof(Keybutton) * keybuttonsLength);
+
+	for (unsigned char i = 0; i < keybuttonsLength; ++i) {
+		_verifyKeyId(keybuttonLabels[i]);
+
+		keybuttons[i].isPressed = 0;
+		keybuttons[i].scancode = SDL_GetScancodeFromKey(keybuttonLabels[i]);
 	}
-	
-	Input_KeyboardHandler self = {
-		.keys = keys,
-		.keysLength = keysLength,
-		.keyboardState = SDL_GetKeyboardState(NULL)
-	};
-	return self;
+	return keybuttons;
 }
-void Input_KeyboardHandler_destroy(Input_KeyboardHandler *self) {
-	free(self->keys);
-	self->keys = NULL;
-	self->keyboardState = NULL;
+void Input_destroyKeybuttons(Keybutton *arrKeybuttons) {
+	free(arrKeybuttons);
 }
 
-unsigned char Input_KeyboardHandler_checkQuit(Input_KeyboardHandler *self) {
-	SDL_PollEvent(&(self->event));
-	return self->event.type == SDL_QUIT;
-}
-unsigned char Input_KeyboardHandler_check(Input_KeyboardHandler *self) {
+unsigned char Input_checkKeybuttons(Keybutton *keybuttons, unsigned char keybuttonsLength) {
 	
-	_Key *keys = self->keys;
 	unsigned char returnValue = 0;
 
-	for (unsigned char i = 0; i < self->keysLength; i++) {
-		if (self->keyboardState[keys[i].scancode] == keys[i].isPressed) {
+	for (unsigned char i = 0; i < keybuttonsLength; ++i) {
+		if (_keyboardState[keybuttons[i].scancode] == keybuttons[i].isPressed) {
 			continue;
 		}
-		if (keys[i].isPressed) {
-			keys[i].isPressed = 0;
+		if (keybuttons[i].isPressed) {
+			keybuttons[i].isPressed = 0;
 			continue;
-		}
+		} //rn, if two pressed on same frame it drops one. Should I leave it for next frame?
 		returnValue = i + 1;
-		keys[i].isPressed = 1;
+		keybuttons[i].isPressed = 1;
 	}
 	return returnValue;
 }
 
+unsigned char Input_checkQuit() {
+	SDL_PollEvent(&_event);
+	return _event.type == SDL_QUIT;
+}
+unsigned char Input_checkAnyKeypress() {
+	return _event.type == SDL_KEYDOWN;
+}
 
+//private
 void _verifyKeyId(char id) {
-	//can never be 0 since 0 == nothing pressed
+	//should never be 0 since 0 == nothing pressed
 	if (97 <= id < 123) { //lowercase letter
 		return;
 	}
