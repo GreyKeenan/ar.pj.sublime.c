@@ -16,10 +16,10 @@ typedef struct {
 void Input_initialize();
 void Input_resetKeyboard();
 
-Keybutton *Input_initializeKeybuttons(char *keybuttonLabels, unsigned char keybuttonsLength);
+Keybutton *Input_initializeKeybuttons(const char *keybuttonLabels, const unsigned char keybuttonsLength);
 void Input_destroyKeybuttons(Keybutton *arrKeybuttons);
 
-unsigned char Input_checkKeybuttons(Keybutton *keybuttons, unsigned char keybuttonsLength);
+unsigned char Input_checkKeybuttons(Keybutton *keybuttons, const unsigned char keybuttonsLength);
 
 unsigned char Input_checkQuit();
 unsigned char Input_checkAnyKeypress();

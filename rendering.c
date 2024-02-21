@@ -35,21 +35,23 @@ void Rendering_destroy() {
 
 void Rendering_present() {
 	SDL_RenderPresent(_renderer);
+}
+void Rendering_clear() {
 	SDL_RenderClear(_renderer);
 }
 
 
-void *Rendering_createTexture(char *filepath) {
+void *Rendering_createTexture(const char *filepath) {
 	SDL_Surface *image = SDL_LoadBMP(filepath);
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, image);
 	SDL_FreeSurface(image);
 	return (void *)texture;
 }
-void Rendering_destroyTexture(void *texture) {
+void Rendering_destroyTexture(const void *texture) {
 	SDL_DestroyTexture((SDL_Texture *)texture);
 }
 
-void Rendering_printTexture(void *texture, int x, int y, int width, int height) {
+void Rendering_printTexture(const void *texture, const int x, const int y, const int width, const int height) {
 	SDL_Rect rectangle = {x,y, width,height};
 	SDL_RenderCopy(_renderer, (SDL_Texture *)texture, NULL, &rectangle);
 }

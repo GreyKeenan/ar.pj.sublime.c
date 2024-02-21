@@ -14,7 +14,7 @@ void Input_resetKeyboard() {
 	SDL_ResetKeyboard();
 }
 
-Keybutton *Input_initializeKeybuttons(char *keybuttonLabels, unsigned char keybuttonsLength) {
+Keybutton *Input_initializeKeybuttons(const char *keybuttonLabels, const unsigned char keybuttonsLength) {
 	Keybutton *keybuttons = malloc(sizeof(Keybutton) * keybuttonsLength);
 
 	for (unsigned char i = 0; i < keybuttonsLength; ++i) {
@@ -29,7 +29,7 @@ void Input_destroyKeybuttons(Keybutton *arrKeybuttons) {
 	free(arrKeybuttons);
 }
 
-unsigned char Input_checkKeybuttons(Keybutton *keybuttons, unsigned char keybuttonsLength) {
+unsigned char Input_checkKeybuttons(Keybutton *keybuttons, const unsigned char keybuttonsLength) {
 	
 	unsigned char returnValue = 0;
 
@@ -56,7 +56,7 @@ unsigned char Input_checkAnyKeypress() {
 }
 
 //private
-void _verifyKeyId(char id) {
+void _verifyKeyId(const char id) {
 	//should never be 0 since 0 == nothing pressed
 	if (97 <= id < 123) { //lowercase letter
 		return;
