@@ -1,10 +1,21 @@
 
 #include "game.h"
 
+unsigned char Game_main() {
+	
+	const Game_Object staticObjects[] = {
+		Game_Object_initialize(Rendering_createTexture("assets/textures/water.bmp"), false),
+		Game_Object_initialize(Rendering_createTexture("assets/textures/wall.bmp"), true),
+		Game_Object_initialize(Rendering_createTexture("assets/textures/lime.bmp"), false)
+	};
 
-unsigned char Game_main(int temp_level) {
+	const void* entityTextures[] = {
+		Rendering_createTexture("assets/textures/slime.bmp"),
+		Rendering_createTexture("assets/textures/box.bmp")
+		//todo: other textures
+	};
 
-	Map map = Map_initialize("assets/levels/1.txt");
+	Game_Map map = Game_Map_initialize("assets/levels/1.txt", staticObjects, entityTextures);
 
 	const unsigned char keybsLength = 4;
 	const char keyLabels[4] = {'w', 'q', 's', 'a'};
@@ -14,7 +25,7 @@ unsigned char Game_main(int temp_level) {
 	unsigned char nextControl = 0;
 	
 	while (1) {
-	if (Input_checkQuit()) {
+		if (Input_checkQuit()) {
 			nextControl = 0;
 			break;
 		}
@@ -39,14 +50,11 @@ unsigned char Game_main(int temp_level) {
 				exit(0);
 		};
 
-		Map_draw(&map);
+		Game_Map_draw(&map);
 		Rendering_present();
-
 	}
 
-	Map_destroy(&map);
+	Game_Map_destroy(&map);
 	Input_destroyKeybuttons(keybs);
 	return nextControl;
 }
-
-

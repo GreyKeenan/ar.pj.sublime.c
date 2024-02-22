@@ -3,13 +3,15 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "rendering.h"
 #include "input.h"
 
-#include "map.h"
+#include "game_object.h"
+#include "game_map.h"
 
-unsigned char Game_main(int temp_level);
+unsigned char Game_main();
 
 
 #endif

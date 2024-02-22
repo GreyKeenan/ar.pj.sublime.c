@@ -38,7 +38,7 @@ void mainloop(int temp_level) {
 				break;
 			case 2:
 				printf("starting game\n"); //temp
-				nextControl = Game_main(temp_level);
+				nextControl = Game_main();
 				break;
 			default:
 				perror("| Unrecognized nextControl in main() loop. Ending peacefully... |\n");
