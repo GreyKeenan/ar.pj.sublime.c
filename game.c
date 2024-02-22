@@ -13,12 +13,13 @@ unsigned char Game_main() {
 		Rendering_createTexture("assets/textures/slime.bmp"),
 		Rendering_createTexture("assets/textures/box.bmp")
 		//todo: other textures
-	};
+	}; //dont need this later though, so is just taking up mem for nothing
 
 	Game_Map map = Game_Map_initialize("assets/levels/1.txt", staticObjects, entityTextures);
 
+	//input stuff
+	const char keyLabels[] = {'w', 'q', 's', 'a'}; //dont need this later either / also could pass string, but takes an extra char ofc 
 	const unsigned char keybsLength = 4;
-	const char keyLabels[4] = {'w', 'q', 's', 'a'};
 
 	Keybutton *keybs = Input_initializeKeybuttons(keyLabels, keybsLength); 
 
