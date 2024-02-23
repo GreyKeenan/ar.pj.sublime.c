@@ -1,6 +1,9 @@
 
 #include "game.h"
 
+bool _movePlayer(Game_Map *map, const unsigned char direction);
+
+
 unsigned char Game_main() {
 	
 	const Game_Object staticObjects[] = {
@@ -13,7 +16,11 @@ unsigned char Game_main() {
 		Rendering_createTexture("assets/textures/slime.bmp"),
 		Rendering_createTexture("assets/textures/box.bmp")
 		//todo: other textures
-	}; //dont need this later though, so is just taking up mem for nothing
+	}; //dont need the ptrs in this array except for in map init
+
+	//ERROR: need to rethink organization of texture* because have to free them at the end
+
+	const void* emptyTexture = Rendering_createTexture("assets/textures/empty.bmp");
 
 	Game_Map map = Game_Map_initialize("assets/levels/1.txt", staticObjects, entityTextures);
 
@@ -36,6 +43,7 @@ unsigned char Game_main() {
 				break;
 			case 1:
 				printf("^\n");
+				_movePlayer(&map, 0);
 				break;
 			case 2:
 				printf(">\n");
@@ -51,11 +59,26 @@ unsigned char Game_main() {
 				exit(0);
 		};
 
-		Game_Map_draw(&map);
+		Game_Map_draw(&map, emptyTexture);
 		Rendering_present();
 	}
 
 	Game_Map_destroy(&map);
 	Input_destroyKeybuttons(keybs);
 	return nextControl;
+}
+
+
+bool _movePlayer(Game_Map *map, const unsigned char direction) {
+
+	//temp: assume is up
+
+	//todo: prioritize proper slime based on order, handle moving multiple slimes properly in general
+
+	unsigned char x = map->entities[0].x;
+	unsigned char y = map->entities[0].y;
+
+	Game_Map_moveEntity(map, x, y, x - 1, y - 1);
+	
+	return true;
 }

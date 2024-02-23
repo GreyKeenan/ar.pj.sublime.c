@@ -7,6 +7,8 @@ map: render stacked entities in order
 
 map: init entities with position
 
+map: tidy switch/cases
+
 input support for non-alhpabetic chars
 
 rendering scaling

@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+
 typedef struct {
 	const void* texture;
 	bool collides;
@@ -20,7 +21,9 @@ typedef struct {
 
 Game_Object Game_Object_initialize(const void* texture, const bool collides);
 
+
 Game_Entity Game_Entity_initialize(const void* texture, const bool collides, Game_Object *foundation, const unsigned char x, const unsigned char y);
+
 
 
 #endif
