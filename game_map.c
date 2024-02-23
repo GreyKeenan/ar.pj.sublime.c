@@ -37,7 +37,7 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 					break;
 				}
 				if (width != firstWidth) {
-					//putting (!height) check in here would reduce num of checks run each time
+					//putting (!firstWidth) check in here would reduce num of checks run each time
 					perror("map error: uneven row widths");
 					exit(1);
 				}
@@ -48,6 +48,8 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 				playerCount++;
 				width++;
 				break;
+			case GAME_MAP_TILE_LIME:
+				goto entityCase;
 			case GAME_MAP_TILE_BOX:
 				goto entityCase;
 			case GAME_MAP_TILE_UNSTABLEGROUND:
@@ -65,14 +67,14 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 	if (!playerCount) {
 		perror("map error: no player found");
 		exit(1);
-	}
+	} //should I check if there is a lime anywhere?
 	Game_Map self = {
 		.width = firstWidth,
 		.height = height,
 		.playerCount = playerCount,
 		.entityCount = entityCount
 	};
-	printf("%d, %d / %d + %d\n", self.width, self.height, self.playerCount, self.entityCount);
+	//printf("%d, %d / %d + %d\n", self.width, self.height, self.playerCount, self.entityCount);
 
 	self.entities = malloc(sizeof(*self.entities) * (self.playerCount + self.entityCount));
 	self.grid = malloc(sizeof(*self.grid) * (self.width * self.height));
@@ -88,8 +90,8 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 	rewind(fp);
 	while ((c = fgetc(fp)) != EOF) {
 
-		width = firstWidth % 8; //tidy this
-		height = firstWidth / 8;
+		width = firstWidth % self.width; //tidy this
+		height = firstWidth / self.width;
 		//printf("'%c': %d, %d\n", c, width, height);
 
 		switch (c) {
@@ -110,10 +112,6 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 				*pos = &(staticGameObjects[1]);
 				pos++;
 				break;
-			case GAME_MAP_TILE_LIME:
-				*pos = &(staticGameObjects[2]);
-				pos++;
-				break;
 			case GAME_MAP_TILE_SLIME:
 				self.entities[playerCount] = Game_Entity_initialize(
 					gameEntityTextures[0],
@@ -126,9 +124,20 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 				playerCount++;
 				pos++;
 				break;
-			case GAME_MAP_TILE_BOX:
+			case GAME_MAP_TILE_LIME:
 				self.entities[entityCount] = Game_Entity_initialize(
 					gameEntityTextures[1],
+					false,
+					NULL,
+					width,height
+				);
+				*pos = (Game_Object*)(self.entities + entityCount);
+				entityCount++;
+				pos++;
+				break;
+			case GAME_MAP_TILE_BOX:
+				self.entities[entityCount] = Game_Entity_initialize(
+					gameEntityTextures[2],
 					true,
 					NULL,
 					width,height
@@ -139,7 +148,7 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 				break;
 			case GAME_MAP_TILE_UNSTABLEGROUND:
 				self.entities[entityCount] = Game_Entity_initialize(
-					gameEntityTextures[2],
+					gameEntityTextures[3],
 					true,
 					NULL,
 					width,height
@@ -171,7 +180,7 @@ void Game_Map_destroy(Game_Map *self) {
 }
 
 
-#define TEMP_SIZE 50
+#define TEMP_SIZE 30
 //rethink where to store/pass emptyTexture
 void _drawTile(const Game_Object *obj, const unsigned char x, const unsigned char y, const void *emptyTexture) {
 	if (!obj) {
@@ -190,18 +199,17 @@ void _drawTile(const Game_Object *obj, const unsigned char x, const unsigned cha
 void Game_Map_draw(const Game_Map *self, const void* emptyTexture) {
 	for (unsigned char y = 0; y < self->height; ++y) {
 		for (unsigned char x = 0; x < self->width; ++x) {
-			const Game_Object* obj = self->grid[y * self->height + x];
-			_drawTile(obj, x, y, emptyTexture);
+			_drawTile(Game_Map_index(self, x, y), x, y, emptyTexture);
 		}
 	}
 }
 
 
 Game_Object *Game_Map_index(const Game_Map *self, const unsigned char x, const unsigned char y) {
-	return self->grid[y * self->height + x];
+	return self->grid[y * self->width + x];
 }
 void Game_Map_setIndex(Game_Map *self, const unsigned char x, const unsigned char y, Game_Object *to) {
-	self->grid[y * self->height + x] = to;
+	self->grid[y * self->width + x] = to;
 }
 
 bool Game_Map_isInBounds(const Game_Map *self, const unsigned char x, const unsigned char y) {
