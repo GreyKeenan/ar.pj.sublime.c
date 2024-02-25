@@ -9,9 +9,8 @@
 #include "game_map_access.h"
 
 #include "game_object.h"
-#include "game_object_specificInitializers.h"
 
-Game_Map Game_Map_initializePopulated(const char* path, const Game_Object *staticGameObjects, const void **gameEntityTextures);
+Game_Map Game_Map_initialize(const char* path, const Game_Object *staticGameObjects, const void **gameEntityTextures);
 
 
 #endif

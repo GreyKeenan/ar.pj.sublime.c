@@ -22,8 +22,7 @@ unsigned char Game_main() {
 
 	const void* emptyTexture = Rendering_createTexture("assets/textures/empty.bmp");
 
-	Game_Map map = Game_Map_initializePopulated("assets/levels/debug.txt", staticObjects, entityTextures);
-	//might want map* to be const
+	Game_Map map = Game_Map_initialize("assets/levels/debug.txt", staticObjects, entityTextures);
 
 	//input stuff
 	const char keyLabels[] = {'w', 'q', 's', 'a'}; //dont need this later either / also could pass string, but takes an extra char ofc 

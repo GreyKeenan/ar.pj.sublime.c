@@ -11,7 +11,7 @@
 bool Game_Map_isInBounds(const Game_Map *self, const unsigned char x, const unsigned char y);
 
 Game_Object *Game_Map_index(const Game_Map *self, const unsigned char x, const unsigned char y);
-void Game_Map_setIndex(Game_Map *self, const unsigned char x, const unsigned char y, Game_Object *to);
+void Game_Map_setIndex(Game_Map *self, const unsigned char x, const unsigned char y, const Game_Object *to);
 
 
 #endif

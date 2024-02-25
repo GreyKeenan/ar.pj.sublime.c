@@ -24,7 +24,6 @@ typedef struct {
 	const unsigned char entityCount;
 } Game_Map;
 
-Game_Map Game_Map_initialize();
 void Game_Map_destroy(Game_Map *self);
 
 
