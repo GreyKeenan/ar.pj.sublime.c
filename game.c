@@ -22,7 +22,7 @@ unsigned char Game_main() {
 
 	const void* emptyTexture = Rendering_createTexture("assets/textures/empty.bmp");
 
-	Game_Map map = Game_Map_initialize("assets/levels/debug.txt", staticObjects, entityTextures);
+	Game_Map map = Game_Map_initializePopulated("assets/levels/debug.txt", staticObjects, entityTextures);
 	//might want map* to be const
 
 	//input stuff
@@ -83,7 +83,7 @@ bool _movePlayer(Game_Map *map, const char byX, const char byY) {
 		unsigned char x = map->entities[i].x;
 		unsigned char y = map->entities[i].y;
 
-		Game_Map_moveEntity(map, x, y, x + byX, y + byY);
+		//Game_Map_moveEntity(map, x, y, x + byX, y + byY);
 	}
 
 	

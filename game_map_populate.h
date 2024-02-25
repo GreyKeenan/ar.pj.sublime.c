@@ -11,7 +11,7 @@
 #include "game_object.h"
 #include "game_object_specificInitializers.h"
 
-//void Game_Map_populate();
+Game_Map Game_Map_initializePopulated(const char* path, const Game_Object *staticGameObjects, const void **gameEntityTextures);
 
 
 #endif

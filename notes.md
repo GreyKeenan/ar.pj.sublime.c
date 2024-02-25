@@ -1,7 +1,12 @@
 
 # Todo
 
+
+Game_Map_initialize()
+
+
 collision
+
 
 ! map: tidy switch/cases
 
