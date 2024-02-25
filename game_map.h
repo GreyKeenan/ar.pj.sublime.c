@@ -37,9 +37,8 @@ void Game_Map_setIndex(Game_Map *self, const unsigned char x, const unsigned cha
 
 bool Game_Map_isInBounds(const Game_Map *self, const unsigned char x, const unsigned char y);
 
+
 void Game_Map_moveEntity(Game_Map *self, const unsigned char fromX, const unsigned char fromY, const unsigned char toX, const unsigned char toY);
-	//doesnt check isInBounds
-	//todo: make toY relative to fromY
 
 
 #endif

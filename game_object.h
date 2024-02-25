@@ -9,6 +9,9 @@ typedef struct {
 	bool collides;
 	bool isEntity;
 
+	bool (*onPush)(const char directionX, const char directionY);
+	void (*onExit)();
+
 } Game_Object;
 
 typedef struct {
@@ -20,7 +23,6 @@ typedef struct {
 } Game_Entity;
 
 Game_Object Game_Object_initialize(const void* texture, const bool collides);
-
 
 Game_Entity Game_Entity_initialize(const void* texture, const bool collides, Game_Object *foundation, const unsigned char x, const unsigned char y);
 

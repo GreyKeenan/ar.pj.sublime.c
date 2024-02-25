@@ -67,7 +67,8 @@ Game_Map Game_Map_initialize(const char *path, const Game_Object *staticGameObje
 	if (!playerCount) {
 		perror("map error: no player found");
 		exit(1);
-	} //should I check if there is a lime anywhere?
+	}
+	//todo: check for limes?
 	Game_Map self = {
 		.width = firstWidth,
 		.height = height,
@@ -206,9 +207,17 @@ void Game_Map_draw(const Game_Map *self, const void* emptyTexture) {
 
 
 Game_Object *Game_Map_index(const Game_Map *self, const unsigned char x, const unsigned char y) {
+	if (!Game_Map_isInBounds(self, x, y)) {
+		perror("Map getting index out-of-bounds. Terminating Program");
+		exit(1);
+	}
 	return self->grid[y * self->width + x];
 }
 void Game_Map_setIndex(Game_Map *self, const unsigned char x, const unsigned char y, Game_Object *to) {
+	if (!Game_Map_isInBounds(self, x, y)) {
+		perror("Map setting index out-of-bounds. Terminating Program");
+		exit(1);
+	}
 	self->grid[y * self->width + x] = to;
 }
 

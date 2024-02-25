@@ -8,6 +8,7 @@ Game_Object Game_Object_initialize(const void* texture, const bool collides) {
 		.collides = collides,
 		.isEntity = false
 	};
+
 	return self;
 }
 
@@ -15,8 +16,7 @@ Game_Entity Game_Entity_initialize(const void* texture, const bool collides, Gam
 	Game_Entity self = {
 		.gameObject = Game_Object_initialize(texture, collides),
 		.foundation = foundation,
-		.x = x,
-		.y = y
+		.x = x, .y = y
 	};
 	self.gameObject.isEntity = true;
 	return self;
