@@ -3,14 +3,18 @@
 
 #include <stdbool.h>
 
+struct Game_Object;
 
-typedef struct {
+typedef bool(*Game_Object_methodOnPush)(struct Game_Object*, char, char);
+typedef void(*Game_Object_methodOnExit)(struct Game_Object*);
+
+typedef struct Game_Object {
 	const void* texture;
 	bool collides;
 	bool isEntity;
 
-	bool (*onPush)(const char directionX, const char directionY);
-	void (*onExit)();
+	Game_Object_methodOnPush onPush;
+	Game_Object_methodOnExit onExit;
 
 } Game_Object;
 
@@ -22,10 +26,9 @@ typedef struct {
 
 } Game_Entity;
 
-Game_Object Game_Object_initialize(const void* texture, const bool collides);
+Game_Object Game_Object_initialize(const void* texture, const bool collides, Game_Object_methodOnPush onPush, Game_Object_methodOnExit onExit);
 
-Game_Entity Game_Entity_initialize(const void* texture, const bool collides, Game_Object *foundation, const unsigned char x, const unsigned char y);
-
+Game_Entity Game_Entity_initialize(const void* texture, const bool collides, Game_Object_methodOnPush onPush, Game_Object_methodOnExit onExit, Game_Object *foundation, const unsigned char x, const unsigned char y);
 
 
 #endif

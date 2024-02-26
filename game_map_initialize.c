@@ -123,34 +123,30 @@ void _cut(Game_Map *self, FILE *fp, const Game_Object *staticGameObjects, const 
 					Game_Map_setIndex(self, x,y, staticGameObjects + 1);
 					break;
 				case GAME_MAP_TILE_SLIME:
-					self->entities[playerCount] = Game_Entity_initialize(
+					self->entities[playerCount] = Game_Entity_createSlime(
 						gameEntityTextures[0],
-						true,
 						NULL,
 						x,y
 					);
 					goto incrementPlayer;
 				case GAME_MAP_TILE_LIME:
-					self->entities[entityCount] = Game_Entity_initialize(
+					self->entities[entityCount] = Game_Entity_createLime(
 						gameEntityTextures[1],
-						false,
 						NULL,
 						x,y
 					);
 					goto incrementEntity;
 				case GAME_MAP_TILE_BOX:
-					self->entities[entityCount] = Game_Entity_initialize(
+					self->entities[entityCount] = Game_Entity_createBox(
 						gameEntityTextures[2],
-						false,
 						NULL,
 						x,y
 					);
 					goto incrementEntity;
 				/*
 				case GAME_MAP_TILE_UNSTABLEGROUND:
-					self->entities[entityCount] = Game_Entity_initialize(
+					self->entities[entityCount] = Game_Entity_createUnstableGround(
 						gameEntityTextures[3],
-						false,
 						NULL,
 						x,y
 					);

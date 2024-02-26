@@ -7,8 +7,8 @@ bool _movePlayer(Game_Map *map, const char byX, const char byY);
 unsigned char Game_main() {
 	
 	const Game_Object staticObjects[] = {
-		Game_Object_initialize(Rendering_createTexture("assets/textures/water.bmp"), false),
-		Game_Object_initialize(Rendering_createTexture("assets/textures/wall.bmp"), true)
+		Game_Object_createWater(Rendering_createTexture("assets/textures/water.bmp")),
+		Game_Object_createWall(Rendering_createTexture("assets/textures/wall.bmp"))
 	};
 
 	const void* entityTextures[] = {
@@ -84,7 +84,6 @@ bool _movePlayer(Game_Map *map, const char byX, const char byY) {
 
 		//Game_Map_moveEntity(map, x, y, x + byX, y + byY);
 	}
-
 	
 	return true;
 }
