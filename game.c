@@ -81,7 +81,7 @@ bool _movePlayer(Game_Map *map, const char byX, const char byY) {
 		unsigned char toY = map->entities[i].y + byY;
 
 		Game_Object *reciever = Game_Map_index(map, toX,toY);
-		if (reciever == NULL || reciever->onPush(reciever, byX, byY)) {
+		if (reciever == NULL || reciever->onPush(reciever, map, byX, byY)) {
 			Game_Entity_move(
 				map->entities + i,
 				map,

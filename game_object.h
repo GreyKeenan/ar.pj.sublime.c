@@ -5,7 +5,7 @@
 
 struct Game_Object;
 
-typedef bool(*Game_Object_methodOnPush)(struct Game_Object*, char, char);
+typedef bool(*Game_Object_methodOnPush)(struct Game_Object*, void *, char, char); //temp void* until better plan
 typedef void(*Game_Object_methodOnExit)(struct Game_Object*);
 
 typedef struct Game_Object {

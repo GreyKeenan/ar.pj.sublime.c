@@ -42,7 +42,7 @@ Game_Entity Game_Entity_createBox(const void* texture, Game_Object *foundation, 
 	return Game_Entity_initialize(
 		texture,
 		1,
-		&Game_Object_onPushDefault,
+		&Game_Entity_onPushPushable,
 		&Game_Object_onExitDefault,
 		foundation,
 		x,y
