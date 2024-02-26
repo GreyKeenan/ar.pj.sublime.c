@@ -16,7 +16,7 @@ unsigned char Game_main() {
 		Rendering_createTexture("assets/textures/lime.bmp"),
 		Rendering_createTexture("assets/textures/box.bmp")
 		//todo: other textures
-	}; //dont need the ptrs in this array except for in map init
+	};
 
 	//ERROR: need to rethink organization of texture* because have to free them at the end
 
@@ -74,15 +74,21 @@ unsigned char Game_main() {
 
 bool _movePlayer(Game_Map *map, const char byX, const char byY) {
 
-	//temp: assume is up
-
 	//todo: prioritize proper slime based on order, handle moving multiple slimes properly in general
 
 	for (unsigned char i = 0; i < map->playerCount; ++i) {
-		unsigned char x = map->entities[i].x;
-		unsigned char y = map->entities[i].y;
+		unsigned char toX = map->entities[i].x + byX;
+		unsigned char toY = map->entities[i].y + byY;
 
-		//Game_Map_moveEntity(map, x, y, x + byX, y + byY);
+		Game_Object *reciever = Game_Map_index(map, toX,toY);
+		if (reciever == NULL || reciever->onPush(reciever, byX, byY)) {
+			Game_Entity_move(
+				map->entities + i,
+				map,
+				toX, toY
+			);
+
+		}
 	}
 	
 	return true;

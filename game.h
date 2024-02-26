@@ -10,6 +10,7 @@
 
 #include "game_object.h"
 #include "game_object_createSpecific.h"
+#include "game_object_movement.h"
 
 #include "game_map.h"
 #include "game_map_initialize.h"
