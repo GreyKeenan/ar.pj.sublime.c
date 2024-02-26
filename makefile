@@ -1,13 +1,12 @@
 
-app: main.c
-	gcc -o app.exe \
+static: main.c build/
+	gcc -o build/app.exe \
 		*.c \
 		-lSDL2
+allDynamic: main.c
 
-run:
-	make
-	@echo "\n...\n"
-	@./app.exe
+run: build/app.exe
+	build/app.exe
 
-clean:
-	rm app.exe
+clean: build/
+	rm build/*
