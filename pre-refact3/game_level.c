@@ -1,16 +1,6 @@
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "game_level.h"
 
-#include "game_map_impl.h"
-#include "game_map_index.h"
-
-#include "game_tile_createTiles.h"
-
-#include "game_entity_forw.h"
-#include "game_entity_createEntities.h"
-
-#include "game_map_initPopulated.h"
 
 #define GAME_MAP_TILE_EMPTY '.'
 #define GAME_MAP_TILE_WATER 'w'
@@ -21,32 +11,63 @@
 #define GAME_MAP_TILE_UNSTABLEGROUND '0'
 //lava (l), ice (i), cracked ice (h), peppers (~), fire (!)
 
-Game_Map *_measure(FILE *fp);
-void _cut(Game_Map *self, FILE *fp, Game_Tile **gameTiles, const RenderingT_texture **entityTextures);
+#include <stdlib.h>
+#include <stdio.h>
 
-Game_Map *Game_Map_initPopulated(const char* path, Game_Tile **gameTiles, const RenderingT_texture **entityTextures) {
+#include "game_map.h"
+#include "game_map_index.h"
 
+void _measureMap(FILE *fp, unsigned char *writeTo);
+
+void _populateMap(Game_Map *map, FILE *fp, Game_Map_TileI **tiles);
+
+
+Game_Level *Game_Level_init(const char *path, Game_Map_TileI **tiles) {
 	FILE *fp = fopen(path, "r");
 	if (!fp) {
 		perror("Opening level file failed");
 		exit(1);
 	}
 
-	Game_Map *self = _measure(fp);
+
+	unsigned char mapSpecs[5];
+		//width,height, playerCount, limeCount, uniqueTileCount
+
+	_measureMap(fp, mapSpecs);
+
+	Game_Map *map = Game_Map_init(mapSpecs[0], mapSpecs[2]);
 
 	rewind(fp);
-	_cut(self, fp, gameTiles, entityTextures);
+	_populateMap(map, fp, tiles);
 
+	
 	fclose(fp);
-	return self;
 
+	Game_Level *self = malloc(sizeof(Game_Level));
+	
+	self->map = map;
+	self->playerCount = mapSpecs[2];
+	self->limeCount = mapSpecs[3];
+	self->uniqueTileCount = mapSpecs[4];
+
+	self->players = malloc(sizeof(*self->players) * self->playerCount);
+	self->limes = malloc(sizeof(*self->limes) * self->limeCount);
+	self->uniqueTiles = malloc(sizeof(*self->uniqueTiles) * self->uniqueTileCount);
+
+	return self;
+}
+
+void Game_Level_destroy(Game_Level *self) {
+	Game_Map_destroy(self->map);
+	free(self);
 }
 
 
-Game_Map *_measure(FILE *fp) {
+void _measureMap(FILE *fp, unsigned char *writeTo) {
 	
 	unsigned char playerCount = 0;
-	unsigned char entityCount = 0;
+	unsigned char limeCount = 0;
+	unsigned char uniqueTileCount = 0;
 	unsigned char firstWidth = 0;
 	unsigned char width = 0;
 	unsigned char height = 0;
@@ -80,18 +101,20 @@ Game_Map *_measure(FILE *fp) {
 				width++;
 				break;
 			case GAME_MAP_TILE_LIME:
-				goto entityCase;
+				limeCount++;
+				width++;
+				break;
 			case GAME_MAP_TILE_BOX:
-				goto entityCase;
+				goto uniqueTileCase;
 			case GAME_MAP_TILE_UNSTABLEGROUND:
-				goto entityCase;
+				goto uniqueTileCase;
 			default:
 				width++;
 				break;
 		};
 		continue;
-		entityCase:
-			entityCount++;
+		uniqueTileCase:
+			uniqueTileCount++;
 			width++;
 			continue;
 	}
@@ -100,12 +123,20 @@ Game_Map *_measure(FILE *fp) {
 		perror("map error: no player found");
 		exit(1);
 	}
+	if (!limeCount) {
+		perror("map error: no limes found");
+		exit(1);
+	}
 
-	return Game_Map_init(firstWidth, height, playerCount, entityCount);
-	
-
+	writeTo[0] = firstWidth;
+	writeTo[1] = height;
+	writeTo[2] = playerCount;
+	writeTo[3] = limeCount;
+	writeTo[4] = uniqueTileCount;
 }
-void _cut(Game_Map *self, FILE *fp, Game_Tile **gameTiles, const RenderingT_texture **entityTextures) {
+
+/*
+void _populateMap(Game_Map *map, FILE *fp, Game_Map_TileI **tiles) {
 	unsigned char playerCount = 0;
 	unsigned char entityCount = 0;
 
@@ -123,44 +154,44 @@ void _cut(Game_Map *self, FILE *fp, Game_Tile **gameTiles, const RenderingT_text
 
 			switch (c) {
 				case GAME_MAP_TILE_EMPTY:
-					Game_Map_setIndex(self, x,y, gameTiles[0]);
+					Game_Map_setIndex(self, x,y, tiles[0]);
 					break;
 				case GAME_MAP_TILE_WATER:
-					Game_Map_setIndex(self, x,y, gameTiles[1]);
+					Game_Map_setIndex(self, x,y, tiles[1]);
 					break;
 				case GAME_MAP_TILE_WALL:
-					Game_Map_setIndex(self, x,y, gameTiles[2]);
+					Game_Map_setIndex(self, x,y, tiles[2]);
 					break;
 				case GAME_MAP_TILE_SLIME:
 					self->players[playerCount] = (Game_Player *)Game_Entity_createSlime(
-						entityTextures[0],
+						dynamicTileTextures[0],
 						NULL,
 						x,y
 					);
 					goto incrementPlayer;
 				case GAME_MAP_TILE_LIME:
 					self->entities[entityCount] = Game_Entity_createLime(
-						entityTextures[1],
+						dynamicTileTextures[1],
 						NULL,
 						x,y
 					);
 					goto incrementEntity;
 				case GAME_MAP_TILE_BOX:
 					self->entities[entityCount] = Game_Entity_createBox(
-						entityTextures[2],
+						dynamicTileTextures[2],
 						NULL,
 						x,y
 					);
 					goto incrementEntity;
-				/*
+				*
 				case GAME_MAP_TILE_UNSTABLEGROUND:
 					self->entities[entityCount] = (Game_Tile *)Game_Entity_createUnstableGround(
-						entityTextures[3],
+						dynamicTileTextures[3],
 						NULL,
 						x,y
 					);
 					goto incrementEntity;
-				*/
+				*
 				default: 
 					perror("Unrecognized key when mapping level");
 					exit(1);
@@ -179,3 +210,4 @@ void _cut(Game_Map *self, FILE *fp, Game_Tile **gameTiles, const RenderingT_text
 		}
 	}
 }
+*/
