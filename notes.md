@@ -1,6 +1,11 @@
 
 # Todo
 
+game tiles
+	Game_Map_TileI
+
+	Game_Object
+
 
 collision
 

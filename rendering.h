@@ -1,7 +1,7 @@
 #ifndef RENDERING_H
 #define RENDERING_H
 
-typedef const void RenderingT_texture;
+#include "renderingT.h"
 
 void Rendering_initialize();
 void Rendering_destroy();
